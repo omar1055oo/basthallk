@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | بسطتهالك</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* إعدادات الألوان المتطابقة مع الهوية البصرية */
+        :root {
+            --petrol-blue: #155B75;  /* الأزرق البترولي */
+            --bright-yellow: #FDC010; /* الأصفر */
+            --teal: #42C4B9;          /* الفيروزي */
+            --bg-gray: #F9F9F9;
+            --text-dark: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-gray);
+            direction: rtl; /* اتجاه الصفحة من اليمين لليسار */
+        }
+
+        /* --- الشريط العلوي (Navbar) --- */
+        .navbar {
+            background: #fff;
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-items {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* تنسيق الشعار */
+        .logo img {
+            max-height: 45px; /* حجم مناسب للشعار */
+            width: auto;
+        }
+
+        .icon-btn {
+            font-size: 1.2rem;
+            color: #555;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .icon-btn:hover { color: var(--teal); }
+
+        /* --- الخلفية الزرقاء العلوية (Header) --- */
+        .header-bg {
+            background-color: var(--petrol-blue);
+            height: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 40px;
+            color: white;
+            position: relative;
+        }
+
+        .page-label {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 35px;
+            border-radius: 50px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .lock-icon {
+            font-size: 4rem;
+            color: var(--bright-yellow);
+            opacity: 0.9;
+        }
+
+        /* --- كارت تسجيل الدخول (Card) --- */
+        .login-card {
+            background: #fff;
+            max-width: 480px;
+            width: 90%;
+            margin: -80px auto 50px auto; /* التداخل مع الخلفية الزرقاء */
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 10;
+        }
+
+        .card-title h3 {
+            color: var(--petrol-blue);
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .card-title p {
+            color: #777;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        /* --- حقول الإدخال --- */
+        .input-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 15px 15px 15px 45px; /* مساحة للأيقونة */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: 0.3s;
+            background: #fdfdfd;
+        }
+
+        .input-box input:focus {
+            border-color: var(--teal);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(66, 196, 185, 0.15);
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        .input-box input:focus + i { color: var(--teal); }
+
+        /* --- أزرار التبديل ونسيت كلمة السر --- */
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        /* تصميم زر السويتش */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--teal); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .forgot-link {
+            color: var(--petrol-blue);
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        /* --- الأزرار الرئيسية --- */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: 0.2s;
+        }
+
+        .btn-login {
+            background-color: var(--bright-yellow);
+            color: white;
+            box-shadow: 0 4px 10px rgba(253, 192, 16, 0.3);
+        }
+        .btn-login:hover { background-color: #eeb50e; }
+
+        .btn-pay {
+            background-color: var(--teal);
+            color: white;
+            font-size: 1rem;
+        }
+        .btn-pay:hover { background-color: #3bb3a9; }
+
+        .signup-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .signup-text a {
+            color: var(--teal);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* --- رسائل التنبيه (Alerts) --- */
+        .alert-box {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95rem;
+            animation: fadeIn 0.4s;
+        }
+        .alert-warning {
+            background-color: #fff8e1;
+            color: #b45309;
+            border: 1px solid #ffe082;
+        }
+        .alert-error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- الفوتر --- */
+        footer {
+            background-color: var(--petrol-blue);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            margin-top: 50px;
+        }
+
+        .hotline {
+            background: white;
+            color: var(--petrol-blue);
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .social-link {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .social-link:hover { background: var(--teal); }
+
+        /* واتساب عائم */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px; left: 25px;
+            background: #25D366; color: white;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 2000;
+        }
+
+        /* تحسينات الموبايل */
+        @media (max-width: 600px) {
+            .navbar { padding: 10px 20px; }
+            .header-bg { height: 220px; }
+            .login-card { margin-top: -60px; width: 95%; padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-items">
+            <i class="fas fa-bars icon-btn"></i>
+            <div class="logo">
+                <img src="img.png" alt="بسطتهالك">
+            </div>
+        </div>
+        <div class="nav-items">
+            <i class="fas fa-search icon-btn"></i>
+            <i class="fas fa-moon icon-btn" style="background:#eee; padding:7px; border-radius:50%;"></i>
+        </div>
+    </nav>
+
+    <header class="header-bg">
+        <div class="page-label">تسجيل الدخول</div>
+        <i class="fas fa-lock lock-icon"></i>
+    </header>
+
+    <main class="login-card">
+        <div class="card-title">
+            <h3>تسجيل الدخول :</h3>
+            <p>ادخل علي حسابك بإدخال رقم الهاتف و كلمة المرور المسجل بهم من قبل</p>
+        </div>
+
+        <div id="alertBox" class="alert-box"></div>
+
+        <form id="loginForm">
+            <div class="input-box">
+                <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+                <i class="fas fa-phone-alt"></i>
+            </div>
+
+            <div class="input-box">
+                <input type="password" id="pass" placeholder="كلمة السر" required>
+                <i class="fas fa-lock"></i>
+            </div>
+
+            <div class="options">
+                <div class="toggle-btn">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <span>الدخول بالكود</span>
+                </div>
+                <div>
+                    هل نسيت كلمة السر؟ <a href="#" class="forgot-link">اضغط هنا</a>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-login">تسجيل الدخول</button>
+            <button type="button" class="btn btn-pay">طريقة الدفع والإشتراك في المواد</button>
+
+            <div class="signup-text">
+                لا يوجد لديك حساب؟ <a href="#">انشئ حسابك الآن !</a>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <h2 style="margin:0 0 15px 0;">بسطتهالك</h2>
+        <div class="hotline">
+            الخط الساخن : 16546 <i class="fas fa-headset"></i>
+        </div>
+        <div class="socials">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p style="opacity: 0.7; font-size: 0.8rem;">جميع الحقوق محفوظة لمنصة بسطتهالك © 2025</p>
+    </footer>
+
+    <a href="#" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const alertBox = document.getElementById('alertBox');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // منع إعادة تحميل الصفحة
+
+            const phone = document.getElementById('phone').value;
+            const pass = document.getElementById('pass').value;
+
+            // البيانات المطلوب التحقق منها
+            const targetPhone = "01121433451";
+            const targetPass = "oppo202299m99";
+
+            // إعادة تهيئة التنبيه
+            alertBox.style.display = 'block';
+            alertBox.className = 'alert-box'; // إزالة الألوان السابقة
+
+            if (phone === targetPhone && pass === targetPass) {
+                // الحالة الأولى: البيانات المطلوبة (مشكلة الجهازين)
+                alertBox.classList.add('alert-warning');
+                alertBox.innerHTML = '<i class="fas fa-exclamation-triangle"></i> عذراً، هذا الحساب مسجل الدخول من جهازين بالفعل!';
+                
+                // تفريغ الباسورد للإيحاء بالتحقق
+                document.getElementById('pass').value = '';
+            } else {
+                // الحالة الثانية: أي بيانات أخرى (خطأ)
+                alertBox.classList.add('alert-error');
+                alertBox.innerHTML = '<i class="fas fa-times-circle"></i> رقم الهاتف أو كلمة المرور غير صحيحة';
+            }
+        });
+    </script>
+</body>
+</html>
